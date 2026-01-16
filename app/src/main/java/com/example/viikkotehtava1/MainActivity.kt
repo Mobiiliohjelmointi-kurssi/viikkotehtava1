@@ -35,11 +35,68 @@ class MainActivity : ComponentActivity() {
 fun HomeScreen(modifier: Modifier = Modifier) {
     var taskList by remember { mutableStateOf(mockTasks) }
 
+    // Tilat uusille syötteille
+    var newTaskTitle by remember { mutableStateOf("") }
+    var newTaskDueDate by remember { mutableStateOf("") }
+    var newTaskIsDone by remember { mutableStateOf(false) }
+
     Column(modifier = modifier.padding(16.dp)) {
         Text(
             text = "Tehtävälista",
             style = MaterialTheme.typography.headlineMedium
         )
+
+        Card(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextField(
+                    value = newTaskTitle,
+                    onValueChange = { newTaskTitle = it },
+                    label = { Text("Tehtävän nimi") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                TextField(
+                    value = newTaskDueDate,
+                    onValueChange = { newTaskDueDate = it },
+                    label = { Text("Eräpäivä (esim. 2026-01-20)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(
+                        checked = newTaskIsDone,
+                        onCheckedChange = { newTaskIsDone = it }
+                    )
+                    Text("Merkkaa tehdyksi heti")
+                }
+
+                Button(
+                    modifier = Modifier.align(Alignment.End),
+                    onClick = {
+                        if (newTaskTitle.isNotBlank()) {
+                            val newTask = Task(
+                                id = (taskList.maxOfOrNull { it.id } ?: 0) + 1,
+                                title = newTaskTitle,
+                                description = "",
+                                priority = 1,
+                                dueDate = if (newTaskDueDate.isBlank()) "Ei eräpäivää" else newTaskDueDate,
+                                done = newTaskIsDone
+                            )
+                            taskList = addTask(taskList, newTask)
+
+                            newTaskTitle = ""
+                            newTaskDueDate = ""
+                            newTaskIsDone = false
+                        }
+                    }
+                ) {
+                    Text("Lisää tehtävä")
+                }
+            }
+        }
 
         Row(
             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
@@ -84,8 +141,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         }
     }
 }
-
-
 fun addTask(list: List<Task>, task: Task): List<Task> {
     return list + task
 }
