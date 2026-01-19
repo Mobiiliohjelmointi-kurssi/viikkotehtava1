@@ -13,6 +13,7 @@ dueDate: Eräpäivä, jonka perusteella lista voidaan järjestää.
 done: Kertoo, onko tehtävä suoritettu.
 
 2. Funktiot
+   
 Sovelluksen toiminnallisuus on toteutettu Kotlin-funktioilla, jotka käsittelevät tehtävälistoja:
 
 addTask: Lisää uuden tehtäväolion olemassa olevan listan loppuun ja palauttaa päivitetyn listan.
