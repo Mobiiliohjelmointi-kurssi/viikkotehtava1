@@ -12,7 +12,7 @@ dueDate: Eräpäivä, jonka perusteella lista voidaan järjestää.
 
 done: Kertoo, onko tehtävä suoritettu.
 
-2. Funktiot
+Funktiot:
    
 Sovelluksen toiminnallisuus on toteutettu Kotlin-funktioilla, jotka käsittelevät tehtävälistoja:
 
