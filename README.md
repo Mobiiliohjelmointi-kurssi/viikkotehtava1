@@ -42,6 +42,8 @@ Miksi ViewModel on parempi kuin pelkkä remember:
 
 ViewModelin käyttö tarjoaa useita etuja verrattuna siihen, että tila pidettäisiin pelkästään Composablen sisällä remember-muuttujassa:
 
+APK: https://drive.google.com/drive/home?dmr=1&ec=wgc-drive-hero-goto
+
 - Elinkaaren hallinta: remember-muuttujat nollautuvat usein esimerkiksi konfiguraatiomuutoksen yhteydessä, mutta ViewModel säilyttää datan näissä tilanteissa.
 
 - Vastuualueiden erottelu: Käyttöliittymäkoodi pysyy siistinä, kun monimutkainen logiikka ja datan käsittely siirretään ViewModeliin.
