@@ -1,25 +1,24 @@
-Datamalli:
+MVVM-malli (Model-View-ViewModel):
+MVVM on arkkitehtuurimalli, jonka tarkoituksena on erottaa sovelluksen käyttöliittymä ja liiketoimintalogiikka toisistaan.
 
-Sovelluksen keskiössä on Task-tietoluokka (data class), joka määrittelee yksittäisen tehtävän rakenteen. Se sisältää seuraavat tiedot:
+Model: Sisältää sovelluksen datan ja tietomallit (esim. Task.kt).
 
-id: Yksilöllinen tunniste.
+View: Käyttöliittymäkerros (Compose), joka näyttää datan käyttäjälle. Se ei sisällä logiikkaa, vaan reagoi ViewModelin tarjoamaan tilaan.
 
-title ja description: Tehtävän nimi ja tarkempi kuvaus.
+ViewModel: Toimii välittäjänä Modelin ja View'n välillä. Se hakee datan ja muokkaa sitä sekä pitää yllä sovelluksen tilaa.
 
-priority: Tehtävän tärkeysaste.
+Miksi se on hyödyllinen Composessa?
 
-dueDate: Eräpäivä, jonka perusteella lista voidaan järjestää.
+-  Compose on suunniteltu toimimaan tilan (State) ympärillä. Kun ViewModelissa oleva tila muuttuu, UI piirtyy automaattisesti uudelleen.
 
-done: Kertoo, onko tehtävä suoritettu.
+-  Koodi on helpompi testata ja ylläpitää, kun käyttöliittymän koodi ei ole sekaisin laskentalogiikan kanssa.
 
-Funktiot:
-   
-Sovelluksen toiminnallisuus on toteutettu Kotlin-funktioilla, jotka käsittelevät tehtävälistoja:
+- ViewModel säilyttää datan esimerkiksi näytön kääntämisen yhteydessä, jolloin käyttäjän syöttämä tieto ei katoa.
 
-addTask: Lisää uuden tehtäväolion olemassa olevan listan loppuun ja palauttaa päivitetyn listan.
+StateFlow:
 
-toggleDone: Etsii listasta tehtävän ID:n perusteella ja kääntää sen done-tilan vastakkaiseksi.
+- StateFlow on tilan seurantaan tarkoitettu tietovirta (Flow), joka säilyttää aina uusimman arvon ja lähettää sen kaikille tilaajilleen.
 
-filterByDone: Suodattaa listasta näkyviin vain ne tehtävät, joiden tila vastaa annettua parametria, esimerkiksi näytä vain tehdyt.
+- Stateflow olemassaoleva ja pitää arvonsa, vaikka kukaan ei aktiivisesti kuuntelisi sitä juuri sillä hetkellä.
 
-sortByDueDate: Järjestää listan tehtävät järjestykseen niiden päivämäärän perusteella.
+- UI-kerroksessa StateFlow muunnetaan Compose-yhteensopivaksi tilaksi käyttämällä collectAsState()-funktiota. Tämä varmistaa, että jokainen muutos ViewModelin datassa päivittää näytön välittömästi.
