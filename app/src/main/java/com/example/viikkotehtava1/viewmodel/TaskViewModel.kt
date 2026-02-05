@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 class TaskViewModel : ViewModel() {
-    // Käytetään StateFlow'ta tilan hallintaan
     private val _tasks = MutableStateFlow<List<Task>>(mockTasks)
     val tasks: StateFlow<List<Task>> = _tasks
 
@@ -27,7 +26,6 @@ class TaskViewModel : ViewModel() {
         _tasks.update { list -> list.filter { it.id != id } }
     }
 
-    // Uusi funktio editointia varten
     fun updateTask(id: Int, newTitle: String, newDescription: String) {
         _tasks.update { list ->
             list.map {

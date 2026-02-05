@@ -1,4 +1,4 @@
-// view/DetailScreen.kt
+
 package com.example.viikkotehtava1.view
 
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +14,6 @@ fun DetailDialog(
     onDismiss: () -> Unit,
     onSave: (String, String) -> Unit
 ) {
-    // Alustetaan tilat tehtävän nykyisillä tiedoilla
     var editedTitle by remember { mutableStateOf(task.title) }
     var editedDescription by remember { mutableStateOf(task.description) }
 

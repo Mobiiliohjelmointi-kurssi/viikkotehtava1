@@ -1,24 +1,36 @@
-MVVM-malli (Model-View-ViewModel):
-MVVM on arkkitehtuurimalli, jonka tarkoituksena on erottaa sovelluksen käyttöliittymä ja liiketoimintalogiikka toisistaan.
+Tämä sovellus on Jetpack Composella toteutettu tehtävänhallintatyökalu, joka hyödyntää MVVM-arkkitehtuuria, jaettua tilaa ja navigointia kahden eri päänäkymän välillä.
 
-Model: Sisältää sovelluksen datan ja tietomallit (esim. Task.kt).
+Navigointi Jetpack Composessa:
 
-View: Käyttöliittymäkerros (Compose), joka näyttää datan käyttäjälle. Se ei sisällä logiikkaa, vaan reagoi ViewModelin tarjoamaan tilaan.
+- Navigointi Jetpack Composessa tarkoittaa siirtymistä sovelluksen eri näyttöjen (Composable-funktioiden) välillä ilman perinteisiä Activity-vaihtoja. Se perustuu sovelluksen sisäiseen reititykseen.
 
-ViewModel: Toimii välittäjänä Modelin ja View'n välillä. Se hakee datan ja muokkaa sitä sekä pitää yllä sovelluksen tilaa.
+NavController: Toimii navigoinnin keskusyksikkönä. Se pitää kirjaa näyttöjen historiasta ja suorittaa siirtymiset reittien välillä.
 
-Miksi se on hyödyllinen Composessa?
+NavHost: Säiliö, joka määrittelee sovelluksen navigointikaavion. Se yhdistää tietyt merkkijonoreitit (esim. home ja calendar) niitä vastaaviin näyttöihin.
 
--  Compose on suunniteltu toimimaan tilan (State) ympärillä. Kun ViewModelissa oleva tila muuttuu, UI piirtyy automaattisesti uudelleen.
+Toteutus: Sovelluksessa on käytössä kaksi pääreittiä: ROUTE_HOME ja ROUTE_CALENDAR. Käyttäjä voi siirtyä listanäkymästä kalenteriin yläpalkin ikonia painamalla ja palata takaisin listaan kalenterinäkymän painikkeella.
 
--  Koodi on helpompi testata ja ylläpitää, kun käyttöliittymän koodi ei ole sekaisin laskentalogiikan kanssa.
+Arkkitehtuuri: MVVM ja jaettu tila
+Sovellus noudattaa MVVM-mallia, joka erottaa käyttöliittymän ja liiketoimintalogiikan toisistaan.
 
-- ViewModel säilyttää datan esimerkiksi näytön kääntämisen yhteydessä, jolloin käyttäjän syöttämä tieto ei katoa.
+Yksi ViewModel, kaksi näyttöä: Sekä HomeScreen että CalendarScreen käyttävät samaa TaskViewModel-instanssia.
 
-StateFlow:
+Tilan jakaminen: ViewModel on alustettu NavHostin yläpuolella MainActivityssa, mikä estää sen uudelleenluomisen navigoinnin aikana.
 
-- StateFlow on tilan seurantaan tarkoitettu tietovirta (Flow), joka säilyttää aina uusimman arvon ja lähettää sen kaikille tilaajilleen.
+Datan synkronointi: Tehtävät on tallennettu ViewModeliin StateFlow-muodossa. Kun tehtävää muokataan tai se merkitään tehdyksi toisella näytöllä, muutos näkyy välittömästi toisella näytöllä collectAsState()-funktion ansiosta.
 
-- Stateflow olemassaoleva ja pitää arvonsa, vaikka kukaan ei aktiivisesti kuuntelisi sitä juuri sillä hetkellä.
+Näkymien toteutus:
 
-- UI-kerroksessa StateFlow muunnetaan Compose-yhteensopivaksi tilaksi käyttämällä collectAsState()-funktiota. Tämä varmistaa, että jokainen muutos ViewModelin datassa päivittää näytön välittömästi.
+CalendarScreen – Tehtävät kalenterissa
+Kalenterinäkymä tarjoaa vaihtoehtoisen tavan tarkastella tehtäviä:
+
+Ryhmittely: Tehtävät ryhmitellään niiden eräpäivän mukaan.
+
+Esitystapa: Jokainen päivämäärä näytetään omana otsikkonaan, jonka alla on lista kyseisen päivän tehtävistä. Tämä auttaa käyttäjää hahmottamaan tulevat määräajat selkeämmin.
+
+AlertDialog – Toiminnot
+Kaikki tietojen syöttäminen ja muokkaaminen on keskitetty dialogeihin, jotta navigointirakenne pysyy yksinkertaisena:
+
+addTask: Uusi tehtävä lisätään kotiruudun kelluvan painikkeen (FAB) kautta avautuvassa AlertDialogissa. Käyttäjä syöttää nimen ja kuvauksen, jotka tallennetaan ViewModelin addTask-funktiolla.
+
+editTask: Olemassa olevaa tehtävää muokataan klikkaamalla sitä listasta, jolloin avautuu DetailDialog. Täällä voi päivittää tietoja (updateTask) tai poistaa tehtävän kokonaan (removeTask).
