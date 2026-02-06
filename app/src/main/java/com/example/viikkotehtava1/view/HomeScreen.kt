@@ -121,7 +121,7 @@ fun HomeScreen(
                             id = (taskList.maxOfOrNull { it.id } ?: 0) + 1,
                             title = title,
                             description = description,
-                            dueDate = "2026-02-05" // Esimerkkipäivämäärä
+                            dueDate = "2026-02-05"
                         ))
                         showAddDialog = false
                     }
